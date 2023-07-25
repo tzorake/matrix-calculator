@@ -1,32 +1,68 @@
 <template>
-    <div class="user-data">
-        <div class="item" v-for="(item, i) in collection" :key="`${item.alias}-${i}`">
-            <MatrixView readonly :alias="item.alias" :data="item.data"/>
-        </div>
-    </div>
+	<div class="user-data">
+		<UserHeader>User Data</UserHeader>
+		<div class="content">
+			<UserDataItem :name="item.name" :data="item.data" :readonly="item.readonly" :mode="mode" v-for="item in collection"
+				:key="item.name" @edit="onEdit" @remove="onRemove" />
+		</div>
+	</div>
 </template>
-<script setup>
-import MatrixView from './MatrixView.vue';
-import { defineProps } from 'vue';
 
-defineProps({
-    collection: {
-        type: Array,
-        default() {
-            return [];
-        },
-    }
+<script setup>
+import UserDataItem from './UserDataItem.vue';
+import { defineProps, defineEmits, computed } from 'vue';
+import { MatrixInputMode } from './utils/MatrixInputMode';
+import UserHeader from './UserHeader.vue';
+
+const props = defineProps({
+	collection: {
+		type: Array,
+		default() {
+			return [];
+		},
+	},
+	mode: {
+		type: Number,
+		default: MatrixInputMode.CREATE,
+	}
 });
+
+const emit = defineEmits(['edit', 'remove']);
+
+const collection = computed(() => {
+	return props.collection;
+});
+const mode = computed(() => {
+	return props.mode;
+});
+
+function onEdit(structure) {
+	console.info('UserData.onEdit');
+	emit('edit', structure);
+}
+
+function onRemove(structure) {
+	console.info('UserData.onRemove');
+	emit('remove', structure);
+}
+
 </script>
 
 <style scoped>
-    .user-data {
-        display: flex;
-        flex-direction: column;;
-        justify-content: center;
-        align-items: center;
+.user-data {
+	display: flex;
+	flex-direction: column;
+}
 
-        gap: 10px;
-        padding: 10px;
-    }
+.content {
+	display: flex;
+	flex-direction: column;;
+	flex-grow: 1;
+	box-sizing: border-box;
+	gap: 10px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	padding: 10px;
+}
+
 </style>

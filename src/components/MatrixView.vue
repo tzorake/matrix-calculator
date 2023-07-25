@@ -1,43 +1,20 @@
 <template>
-  <div class="view">
-    <div class="alias-container">
-      <input
-        type="text"
-        class="alias-edit"
-        v-show="isAliasEditVisible"
-        ref="aliasEdit"
-        v-model="aliasString"
-      />
-      <div
-        class="alias-view"
-        v-show="!isAliasEditVisible"
-        @click="toggleAliasEditingMode"
-        ref="aliasView"
-        v-text="alias.length === 0 ? '▮' : alias"
-      ></div>
+  <div class="matrix-view">
+    <div class="name-container">
+      <input type="text" class="name-edit" v-show="isNameEditVisible" ref="nameEdit" :value="name"
+        @change="$emit('update:name', $event.target.value)" />
+      <div class="name-view" v-show="!isNameEditVisible" @click="toggleNameEditingMode" ref="nameView"
+        v-text="name.length > 0 ? name : '▮'"></div>
     </div>
     <div class="equals">=</div>
-    <div class="matrix-container">
+    <div class="data-container" @click="toggleDataEditingMode">
       <div class="left-bracket"></div>
-      <textarea
-        class="matrix-edit"
-        v-show="isValuesEditVisible"
-        ref="matrixEdit"
-        v-model="matrixString"
-      ></textarea>
-      <div
-        class="matrix-view"
-        v-show="!isValuesEditVisible"
-        @click="toggleMatrixEditingMode"
-        ref="matrixView"
-        :style="{
-          'grid-template-rows': 'repeat(' + data.rows + ', 1fr)',
-          'grid-template-columns': 'repeat(' + data.columns + ', 1fr)',
-        }"
-      >
-        <div class="cell" v-if="data.values.length === 0">▮</div>
-        <div class="cell" v-for="(cell, i) in data.values" :key="i">
-          {{ cell }}
+      <textarea class="data-edit" v-show="isDataEditVisible" ref="dataEdit" :value="data"
+        @change="$emit('update:data', convertData($event.target.value))"></textarea>
+      <div class="data-view" v-show="!isDataEditVisible" ref="dataView" :style="style">
+        <div class="value" v-if="values.length === 0">▮</div>
+        <div class="value" v-else v-for="(value, i) in values" :key="i">
+          {{ value }}
         </div>
       </div>
       <div class="right-bracket"></div>
@@ -46,141 +23,98 @@
 </template>
 
 <script setup>
-import { Matrix } from "./Matrix";
-import { isNumeric, isInteger } from "./helper";
-import { ref, defineProps, defineEmits, nextTick, onMounted, watch } from "vue";
+import { nextTick, onMounted, ref, defineProps, defineEmits, computed } from 'vue'
+import { Matrix } from './utils/Matrix';
 
 const props = defineProps({
-  readonly: {
-    type: Boolean,
-  },
-  alias: {
+  name: {
     type: String,
-    default: "",
+    default: '',
   },
   data: {
     type: Matrix,
-    default() {
-      return Matrix.empty;
-    },
+    default: Matrix.empty,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
 
-const emit = defineEmits(["update:alias", "update:data"]);
+const name = computed(() => props.name);
+const data = computed(() => props.data);
+const rows = computed(() => data.value.rows)
+const columns = computed(() => data.value.columns)
+const values = computed(() => data.value.values)
+const style = computed(() => ({
+  'grid-template-rows': 'repeat(' + (rows.value !== 0 ? rows.value : 1) + ', 1fr)',
+  'grid-template-columns': 'repeat(' + (columns.value !== 0 ? columns.value : 1) + ', 1fr)',
+}));
 
-const aliasEdit = ref();
-const aliasView = ref();
-const matrixEdit = ref();
-const matrixView = ref();
+defineEmits(['update:name', 'update:data']);
 
-const aliasString = ref('');
-const matrixString = ref('');
+const nameView = ref();
+const nameEdit = ref();
+const dataView = ref();
+const dataEdit = ref();
 
-const isAliasEditVisible = ref(false);
-const isValuesEditVisible = ref(false);
+const isNameEditVisible = ref(false);
+const isDataEditVisible = ref(false);
 
-const alias = ref(props.alias);
-const data = ref(props.data);
+function convertData(string) {
+  return Matrix.fromString(string);
+}
 
-function toggleAliasEditingMode() {
+function toggleNameEditingMode() {
   if (props.readonly) {
     return;
   }
 
-  isAliasEditVisible.value = !isAliasEditVisible.value;
+  isNameEditVisible.value = !isNameEditVisible.value;
 
-  if (isAliasEditVisible.value) {
-    nextTick(() => aliasEdit.value.focus());
+  if (isNameEditVisible.value) {
+    nextTick(() => nameEdit.value.focus());
   }
 }
 
-function toggleMatrixEditingMode() {
+function toggleDataEditingMode() {
   if (props.readonly) {
     return;
   }
 
-  isValuesEditVisible.value = !isValuesEditVisible.value;
+  isDataEditVisible.value = !isDataEditVisible.value;
 
-  if (isValuesEditVisible.value) {
-    nextTick(() => matrixEdit.value.focus());
+  if (isDataEditVisible.value) {
+    nextTick(() => dataEdit.value.focus());
   }
 }
-
-watch(() => props.alias, () => {
-  alias.value = props.alias;
-});
-
-watch(aliasString, () => {
-  alias.value = aliasString.value;
-  emit("update:alias", alias.value);
-});
-
-watch(matrixString, () => {
-  // matrix parsing
-  const input = matrixString.value;
-  const matrixRows = input.trim().split("\n");
-
-  if (!Array.isArray(matrixRows)) {
-    data.value = Matrix.empty;
-    emit("update:data", data.value);
-    return;
-  }
-
-  const cells = matrixRows.map((row) => row.trim().split(" "));
-  const n = cells.length;
-  const m = cells[0].length;
-  if (!cells.every((row) => row.length === m)) {
-    data.value = Matrix.empty;
-    emit("update:data", data.value);
-    return;
-  }
-
-  // format matrix if conditions are satisfied
-  const dots = "···";
-
-  if (n >= 5) {
-    cells.splice(1, n - 3);
-    for (let j = 0; j < cells[0].length; ++j) {
-      cells[1][j] = dots;
-    }
-  }
-
-  if (m >= 5) {
-    for (let i = 0; i < cells.length; ++i) {
-      cells[i].splice(1, m - 3);
-      cells[i][1] = dots;
-    }
-  }
-
-  const flatten = cells
-    .flat()
-    .map((s) => (!isNumeric(s) || isInteger(s) ? s : Number(s).toFixed(2)));
-
-    data.value = new Matrix(flatten, cells.length, cells[0].length);
-  emit("update:data", data.value);
-});
 
 onMounted(() => {
-  aliasEdit.value.onblur = toggleAliasEditingMode;
-  matrixEdit.value.onblur = toggleMatrixEditingMode;
+  nameEdit.value.onclick = event => event.stopPropagation();
+  dataEdit.value.onclick = event => event.stopPropagation();
+
+  nameEdit.value.onblur = toggleNameEditingMode;
+  dataEdit.value.onblur = toggleDataEditingMode;
 });
+
 </script>
 
 <style scoped>
-.view {
-  display: inline-flex;
+.matrix-view {
+  display: flex;
   align-items: center;
   justify-content: center;
 
   gap: 5px;
   user-select: none;
+  box-sizing: border-box;
 }
 
-.alias-edit {
+.name-edit {
   width: 50px;
 }
 
-.matrix-container {
+.data-container {
   display: flex;
   gap: 5px;
 }
@@ -193,7 +127,8 @@ onMounted(() => {
   border-bottom-left-radius: 2px;
   width: 5px;
 }
-.matrix-edit {
+
+.data-edit {
   resize: none;
   box-sizing: border-box;
   margin: 0px;
@@ -202,18 +137,18 @@ onMounted(() => {
   height: 150px;
 }
 
-.matrix-view .cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.matrix-view {
+.data-view {
   min-width: 16px;
   min-height: 20px;
 
   display: grid;
   gap: 10px;
+}
+
+.data-view .value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .right-bracket {
