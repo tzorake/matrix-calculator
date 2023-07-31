@@ -5,14 +5,15 @@
 This is a simple matrix calculator that can perform most matrix/vector operations. Data processing executes on the server, which is written in Python and uses Numpy for the matrix operations. So you can implement your own matrix operation quite easily (if you need it).
 
 ## Operations
-
-add(A, B): Sum of matrices A and B.
-subtract(A, B): Subtraction of matrices A and B.
-transpose(A): Transpose of matrix A.
-dot(vA, vB): Dot product of vectors vA and vB.
-cross(vA, vB): Cross product of vectors vA and vB.
-inverse(A): Inverse matrix of A.
-det(A): Determinant of matrix A.
+```
+1. Addition: add(A, B)
+2. Subtraction: subtract(A, B)
+3. Matrix Transposition: transpose(A)
+4. Dot Product: dot(vA, vB)
+5. Cross Product: cross(vA, vB)
+6. Matrix Inversion: inverse(A)
+7. Determinant Computation: det(A) 
+```
 
 ## Demo
 
