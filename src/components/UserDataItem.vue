@@ -1,8 +1,7 @@
 <template>
-	<div class="user-data-item">
-		<MatrixView :name="name" :data="data" :readonly="readonly" />
-		<div class="buttons">
-			<UserButton class="edit-button button-outline-secondary button-sm" @click="onEdit" :disabled="mode === MatrixInputMode.EDIT">
+	<GenericItem :name="name" :data="data" :readonly="readonly">
+		<template v-slot:buttons>
+			<VButton class="edit-button button-outline-secondary button-sm" @click="onEdit" :disabled="mode === EditorMode.EDIT">
 				<svg class="w-6 h-6 text-gray-800 dark:text-white" width="20" height="20" aria-hidden="true"
 					xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 					<path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z" />
@@ -11,25 +10,25 @@
 					<path
 						d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z" />
 				</svg>
-			</UserButton>
-			<UserButton class="remove-button button-outline-danger button-sm" @click="onRemove">
+			</VButton>
+			<VButton class="remove-button button-outline-danger button-sm" @click="onRemove">
 				<svg class="w-6 h-6 text-gray-800 dark:text-white" width="20" height="20" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 					fill="currentColor" viewBox="0 0 18 20">
 					<path
 						d="M17 4h-4V2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H1a1 1 0 0 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1a1 1 0 1 0 0-2ZM7 2h4v2H7V2Zm1 14a1 1 0 1 1-2 0V8a1 1 0 0 1 2 0v8Zm4 0a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v8Z" />
 				</svg>
-			</UserButton>
-		</div>
-	</div>
+			</VButton>
+		</template>
+	</GenericItem>
 </template>
 
 <script setup>
 import { Matrix } from './utils/Matrix';
 import { defineProps, defineEmits, computed } from 'vue';
-import MatrixView from './MatrixView.vue';
-import UserButton from './UserButton.vue';
+import VButton from './VButton.vue';
 import { MatrixStructure } from './utils/MatrixStructure';
-import { MatrixInputMode } from './utils/MatrixInputMode';
+import { EditorMode } from './utils/EditorMode';
+import GenericItem from './GenericItem.vue';
 
 const props = defineProps({
 	name: {
@@ -46,7 +45,7 @@ const props = defineProps({
 	},
 	mode: {
 		type: Number,
-		default: MatrixInputMode.CREATE,
+		default: EditorMode.CREATE,
 	}
 });
 
@@ -70,16 +69,5 @@ function onRemove() {
 </script>
 
 <style scoped>
-.user-data-item {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
 
-.buttons {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
-}
 </style>

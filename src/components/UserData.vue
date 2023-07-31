@@ -1,18 +1,20 @@
 <template>
 	<div class="user-data">
-		<UserHeader>User Data</UserHeader>
-		<div class="content">
+		<VHeader>User Data</VHeader>
+		<VContainer :orientation="Orientation.VERTICAL">
 			<UserDataItem :name="item.name" :data="item.data" :readonly="item.readonly" :mode="mode" v-for="item in collection"
 				:key="item.name" @edit="onEdit" @remove="onRemove" />
-		</div>
+		</VContainer>
 	</div>
 </template>
 
 <script setup>
 import UserDataItem from './UserDataItem.vue';
 import { defineProps, defineEmits, computed } from 'vue';
-import { MatrixInputMode } from './utils/MatrixInputMode';
-import UserHeader from './UserHeader.vue';
+import { EditorMode } from './utils/EditorMode';
+import VHeader from './VHeader.vue';
+import VContainer from './VContainer.vue'
+import { Orientation } from './utils/Orientation';
 
 const props = defineProps({
 	collection: {
@@ -23,8 +25,8 @@ const props = defineProps({
 	},
 	mode: {
 		type: Number,
-		default: MatrixInputMode.CREATE,
-	}
+		default: EditorMode.CREATE,
+	},
 });
 
 const emit = defineEmits(['edit', 'remove']);
@@ -52,17 +54,6 @@ function onRemove(structure) {
 .user-data {
 	display: flex;
 	flex-direction: column;
-}
-
-.content {
-	display: flex;
-	flex-direction: column;;
-	flex-grow: 1;
-	box-sizing: border-box;
-	gap: 10px;
-	background-color: #fff;
-	border: 1px solid #ddd;
-	padding: 10px;
 }
 
 </style>

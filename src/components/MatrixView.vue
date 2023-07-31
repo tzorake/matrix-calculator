@@ -43,10 +43,11 @@ const props = defineProps({
 
 const name = computed(() => props.name);
 const data = computed(() => props.data);
-const rows = computed(() => data.value.rows)
-const columns = computed(() => data.value.columns)
-const values = computed(() => data.value.values)
+const rows = computed(() => data.value.rows);
+const columns = computed(() => data.value.columns);
+const values = computed(() => data.value.values);
 const style = computed(() => ({
+  // the case repeat(0, 1fr) is not valid css code so the case should be handle by hands
   'grid-template-rows': 'repeat(' + (rows.value !== 0 ? rows.value : 1) + ', 1fr)',
   'grid-template-columns': 'repeat(' + (columns.value !== 0 ? columns.value : 1) + ', 1fr)',
 }));

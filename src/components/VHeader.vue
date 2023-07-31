@@ -1,5 +1,5 @@
 <template>
-    <div class="user-hearder">
+    <div class="header">
         <slot></slot>
     </div>
 </template>
@@ -9,7 +9,7 @@
 </script>
 
 <style scoped>
-.user-hearder {
+.header {
     color: #fff;
     background-color: #337ab7;
     border-color: #337ab7;
