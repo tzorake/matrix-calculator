@@ -1,15 +1,22 @@
 <template>
   <div class="toast-stack">
-    <VToast :header="header(notification)" :body="notification.message" :success="notification.success" v-for="(notification, index) in notifications" :key="`${index}-${Math.random()}`" @shift="onShift"></VToast>
+    <VToast
+      :header="header(notification)"
+      :body="notification.message"
+      :success="notification.success"
+      v-for="(notification, index) in notifications"
+      :key="`${index}-${Math.random()}`"
+      @shift="onShift"
+    ></VToast>
   </div>
 </template>
 
 <script setup>
-import { computed, defineProps, defineEmits } from 'vue';
-import VToast from './VToast.vue';
+import { computed, defineProps, defineEmits } from "vue";
+import VToast from "./VToast.vue";
 
 const props = defineProps({
-  'notifications': {
+  notifications: {
     type: Array,
     default() {
       return [];
@@ -17,20 +24,19 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['hide', 'shift']);
+const emit = defineEmits(["hide", "shift"]);
 
 const notifications = computed(() => {
   return props.notifications;
 });
 
 function header(notification) {
-  return notification.success ? 'Message' : `Error ${notification.code}`;
+  return notification.success ? "Message" : `Error ${notification.code}`;
 }
 
 function onShift() {
-  emit('shift');
+  emit("shift");
 }
-
 </script>
 
 <style scoped>

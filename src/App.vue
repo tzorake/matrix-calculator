@@ -61,6 +61,7 @@
       />
     </template>
   </VMenu>
+  <VToastStack :notifications="notifications" @shift="onShift" />
 </template>
 
 <script setup>
@@ -72,6 +73,7 @@ import { ref } from 'vue';
 import { Matrix } from "./components/utils/Matrix";
 import { EditorMode } from "./components/utils/EditorMode";
 import { MatrixStructure } from "./components/utils/MatrixStructure";
+import VToastStack from "./components/VToastStack.vue";
 
 const selectedTab = ref(0);
 
@@ -113,6 +115,7 @@ const userData = ref([
   ),
 ]);
 const resultData = ref([]);
+const notifications = ref([]);
 
 function onChangeSelectedTab(index) {
   selectedTab.value = index;
@@ -183,8 +186,8 @@ function onSuccess(data) {
 }
 
 function onError(error) {
-  console.info('App.onError'); error;
-  // notifications.value = [...notifications.value, error];
+  console.info('App.onError');
+  notifications.value = [...notifications.value, error];
 }
 
 function onCopy(structure) {
@@ -193,10 +196,10 @@ function onCopy(structure) {
   data.value = structure.data;
 }
 
-// function onShift() {
-//   console.info('App.onShift');
-//   notifications.value = [...notifications.value.slice(1)];
-// }
+function onShift() {
+  console.info('App.onShift');
+  notifications.value = [...notifications.value.slice(1)];
+}
 </script>
 
 <style scoped>

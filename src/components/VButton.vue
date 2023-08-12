@@ -74,6 +74,12 @@ button {
 	border-color: #1e7e34;
 }
 
+.button-success.disabled, .button-success:disabled {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
 .button-danger {
 	color: #fff;
 	background-color: #dc3545;
