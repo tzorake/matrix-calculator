@@ -30,10 +30,11 @@ const classNames = computed(() => ({
 .stylized {
   flex-grow: 1;
   box-sizing: border-box;
-  gap: 10px;
+  gap: 0.625rem;
   background-color: #1b1f22;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 10px;
+  padding: 0.625rem;
+  min-height: 14rem;
 }
 
 .horizontal {

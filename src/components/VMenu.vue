@@ -25,17 +25,6 @@ const props = defineProps({
 const icons = ref();
 const content = ref();
 
-// const emit = defineEmits(['tabChanged']);
-
-// function onIconClick(event) {
-//   const children = Array.from(content.value.children);
-//   const index = children.findIndex(child => child === event.target);
-
-//   if (index != null) {
-//     emit('tabChanged', index);
-//   }
-// }
-
 function updateIcons() {
   const iconsChildren = Array.from(icons.value.children);
   
@@ -104,15 +93,60 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.container {
-  display: grid;
-  grid-template-columns: 4rem calc(100% - 4rem); 
-  grid-template-rows: 3rem calc(100% - 3rem);
-  grid-template-areas: 
-  "bar bar"
-  "panel content";
-  min-height: 100vh;
-  background-color: rgb(31, 31, 31, 1.0);
+@media (max-width: 575.98px) {
+  .menu-panel {
+    display: flex;
+    flex-direction: column;
+    grid-area: panel;
+
+    background-color: rgb(24, 24, 24, 1.0);
+    box-sizing: border-box;
+    border-right: 2px solid rgb(31, 31, 31, 1.0);
+
+    color: rgba(255, 255, 255, 0.3);
+
+    position: fixed;
+    top: 3rem;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+    min-width: 4rem;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 4rem calc(100% - 4rem); 
+    grid-template-rows: 3rem calc(100% - 3rem);
+    grid-template-areas: 
+    "bar bar"
+    "panel content";
+    min-height: 100vh;
+    background-color: rgb(31, 31, 31, 1.0);
+  }
+}
+
+@media (min-width: 576px) {
+  .menu-panel {
+    display: none;
+
+    position: fixed;
+    top: 3rem;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+    min-width: 0;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 4rem calc(100% - 4rem); 
+    grid-template-rows: 3rem calc(100% - 3rem);
+    grid-template-areas: 
+    "bar bar"
+    "content content";
+    min-height: 100vh;
+    background-color: rgb(31, 31, 31, 1.0);
+  }
 }
 
 .menu-bar {
@@ -129,26 +163,10 @@ onBeforeUnmount(() => {
   min-height: 3rem;
 }
 
-.menu-panel {
-  display: flex;
-  flex-direction: column;
-  grid-area: panel;
-
-  background-color: rgb(24, 24, 24, 1.0);
-  box-sizing: border-box;
-  border-right: 2px solid rgb(31, 31, 31, 1.0);
-
-  color: rgba(255, 255, 255, 0.3);
-
-  position: fixed;
-  top: 3rem;
-  bottom: 0;
-  left: 0;
-  z-index: 1030;
-  min-width: 4rem;
-}
-
 .content {
   grid-area: content;
+  display: flex;
+  gap: 0.625rem;
+  padding: 0.625rem;
 }
 </style>

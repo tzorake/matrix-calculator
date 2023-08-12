@@ -10,13 +10,22 @@ import VContainer from "./VContainer.vue";
 </script>
 
 <style scoped>
-.tab {
-  padding: 10px;
-  gap: 10px;
-  color: #dee2e6;
+
+@media (max-width: 575.98px) {
+  .hidden {
+    display: none;
+  }
 }
 
-.hidden {
-  display: none;
+@media (min-width: 576px) {
+  .hidden {
+
+  }
+}
+
+.tab {
+  gap: 0.625rem;
+  color: #dee2e6;
+  flex-grow: 1;
 }
 </style>
