@@ -29,9 +29,22 @@ npm install
 npm run serve
 ```
 
-### Compiles, hot-reloads and run server for development
-```
-npm run dev
+### Setups and runs server for development
+```console
+# Create a virtual environment
+python3 -m venv venv
+
+# Activate the virtual environment
+source server/venv/bin/activate
+
+# Install numpy within the virtual environment
+pip install numpy
+
+# Run server.py
+python server/server.py
+
+# Deactivate the virtual environment
+deactivate
 ```
 
 ### Compiles and minifies for production

@@ -1,37 +1,48 @@
 <template>
-  <div class="container" :style="orientation">
-      <slot></slot>
+  <div class="container" :class="classNames">
+    <slot></slot>
   </div>
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue';
-import { Orientation } from './utils/Orientation';
+import { defineProps, computed } from "vue";
+import { Orientation } from "./utils/Orientation";
 
 const props = defineProps({
   orientation: {
     type: Number,
     default: Orientation.HORIZONTAL,
   },
+  stylized: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const mapping = new Map([
-  [Orientation.HORIZONTAL, 'row'],
-  [Orientation.VERTICAL, 'column'],
-]);
-const orientation = computed(() => ({ 'flex-direction': mapping.get(props.orientation, 'row') }));
-
+const classNames = computed(() => ({
+  'horizontal': props.orientation === Orientation.HORIZONTAL || props.orientation !== Orientation.VERTICAL,
+  'vertical': props.orientation === Orientation.VERTICAL,
+  'stylized': props.stylized,
+}));
 </script>
 
 <style scoped>
-.container {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-	box-sizing: border-box;
-	gap: 10px;
-	background-color: #fff;
-	border: 1px solid #ddd;
-	padding: 10px;
+.stylized {
+  flex-grow: 1;
+  box-sizing: border-box;
+  gap: 10px;
+  background-color: #1b1f22;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
 }
 </style>

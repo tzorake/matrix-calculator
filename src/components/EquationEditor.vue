@@ -1,81 +1,91 @@
 <template>
-	<div class="equation-editor">
-		<VHeader>Equation</VHeader>
-		<VContainer :orientation="Orientation.VERTICAL">
-			<textarea class="equation-edit" v-model="equations"></textarea>
-			<div class="button-container">
-				<VButton class="cancel-button button-success button-sm" @click="solve">Solve</VButton>
-			</div>
-		</VContainer>
-	</div>
+  <div class="equation-editor">
+    <VHeader>Equation</VHeader>
+    <VContainer :orientation="Orientation.VERTICAL" stylized>
+      <textarea class="equation-edit" v-model="equations"></textarea>
+      <div class="button-container">
+        <VButton class="cancel-button button-success button-sm" @click="solve">
+					Solve
+				</VButton>
+      </div>
+    </VContainer>
+  </div>
 </template>
 
 <script setup>
-import VButton from './VButton.vue';
-import VContainer from './VContainer.vue';
-import VHeader from './VHeader.vue';
-import { Orientation } from './utils/Orientation';
-import { ServerResponse } from './utils/ServerResponse'
-import { defineProps, computed, ref, defineEmits } from 'vue';
-import { UserData } from './utils/UserData';
+import VButton from "./VButton.vue";
+import VContainer from "./VContainer.vue";
+import VHeader from "./VHeader.vue";
+import { Orientation } from "./utils/Orientation.js";
+import { UserData } from "./utils/UserData.js";
+import { ServerResponse } from "./utils/ServerResponse.js";
+import { defineProps, computed, ref, defineEmits } from "vue";
 
 const props = defineProps({
-	collection: {
-		type: Array,
-		default() {
-			return [];
-		},
-	},
+  collection: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
 });
 
-const emit = defineEmits(['success', 'error']);
+const emit = defineEmits(["success", "error"]);
 
-const equations = ref('');
+const equations = ref("");
 const collection = computed(() => {
-	return props.collection;
+  return props.collection;
 });
 const userData = computed(() => {
-	return new UserData(collection.value, equations.value);
+  return new UserData(collection.value, equations.value);
 });
 
 async function solve() {
-	try {
-		const response = await fetch('http://localhost:6969', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*',
-			},
-			body: JSON.stringify(userData.value)
-		});
+  try {
+    const response = await fetch("http://localhost:6969", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(userData.value),
+    });
 
-		if (!response.ok) {
-			const error = await response.json();
-			emit('error', new ServerResponse(error));
-			return;
-		}
+    if (!response.ok) {
+      const error = await response.json();
+      emit("error", new ServerResponse(error));
+      return;
+    }
 
-		const data = await response.json();
-		emit('success', new ServerResponse(data));
-
-	} 
-	catch (error) {
-		emit('error', new ServerResponse({ success: false, code: 400, message: error.message }));
-		return;
-	}
+    const data = await response.json();
+    emit(
+      "success", 
+      new ServerResponse(data)
+    );
+  } catch (error) {
+    emit(
+      "error",
+      new ServerResponse({ success: false, code: 400, message: error.message })
+    );
+    return;
+  }
 }
-
 </script>
 
 <style scoped>
 .equation-edit {
-	flex-grow: 1;
-	min-height: 150px;
-	resize: none;
+  flex-grow: 1;
+  min-height: 150px;
+  resize: none;
+
+	background-color: #343434;
+  color: inherit;
+	border-color: rgba(255, 255, 255, 0.15);
+	border-radius: 0.25rem;
 }
 
 .button-container {
-	display: flex;
-	justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 </style>

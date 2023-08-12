@@ -1,15 +1,15 @@
 <template>
 	<div class="user-data">
 		<VHeader>User Data</VHeader>
-		<VContainer :orientation="Orientation.VERTICAL">
-			<UserDataItem :name="item.name" :data="item.data" :readonly="item.readonly" :mode="mode" v-for="item in collection"
+		<VContainer :orientation="Orientation.VERTICAL" stylized>
+			<DataViewItem :name="item.name" :data="item.data" :readonly="item.readonly" :mode="mode" v-for="item in collection"
 				:key="item.name" @edit="onEdit" @remove="onRemove" />
 		</VContainer>
 	</div>
 </template>
 
 <script setup>
-import UserDataItem from './UserDataItem.vue';
+import DataViewItem from './DataViewItem.vue';
 import { defineProps, defineEmits, computed } from 'vue';
 import { EditorMode } from './utils/EditorMode';
 import VHeader from './VHeader.vue';
@@ -39,12 +39,12 @@ const mode = computed(() => {
 });
 
 function onEdit(structure) {
-	console.info('UserData.onEdit');
+	console.info('DataView.onEdit');
 	emit('edit', structure);
 }
 
 function onRemove(structure) {
-	console.info('UserData.onRemove');
+	console.info('DataView.onRemove');
 	emit('remove', structure);
 }
 

@@ -1,17 +1,38 @@
 <template>
   <div class="matrix-view">
     <div class="name-container">
-      <input type="text" class="name-edit" v-show="isNameEditVisible" ref="nameEdit" :value="name"
-        @change="$emit('update:name', $event.target.value)" />
-      <div class="name-view" v-show="!isNameEditVisible" @click="toggleNameEditingMode" ref="nameView"
-        v-text="name.length > 0 ? name : '▮'"></div>
+      <input
+        type="text"
+        class="name-edit"
+        v-show="isNameEditVisible"
+        ref="nameEdit"
+        :value="name"
+        @change="onNameUpdate"
+      />
+      <div
+        class="name-view"
+        v-show="!isNameEditVisible"
+        @click="toggleNameEditingMode"
+        ref="nameView"
+        v-text="name.length > 0 ? name : '▮'"
+      ></div>
     </div>
     <div class="equals">=</div>
     <div class="data-container" @click="toggleDataEditingMode">
       <div class="left-bracket"></div>
-      <textarea class="data-edit" v-show="isDataEditVisible" ref="dataEdit" :value="data"
-        @change="$emit('update:data', convertData($event.target.value))"></textarea>
-      <div class="data-view" v-show="!isDataEditVisible" ref="dataView" :style="style">
+      <textarea
+        class="data-edit"
+        v-show="isDataEditVisible"
+        ref="dataEdit"
+        :value="data"
+        @change="onDataUpdate"
+      ></textarea>
+      <div
+        class="data-view"
+        v-show="!isDataEditVisible"
+        ref="dataView"
+        :style="style"
+      >
         <div class="value" v-if="values.length === 0">▮</div>
         <div class="value" v-else v-for="(value, i) in values" :key="i">
           {{ value }}
@@ -23,13 +44,20 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref, defineProps, defineEmits, computed } from 'vue'
-import { Matrix } from './utils/Matrix';
+import {
+  nextTick,
+  onMounted,
+  ref,
+  defineProps,
+  defineEmits,
+  computed,
+} from "vue";
+import { Matrix } from "./utils/Matrix";
 
 const props = defineProps({
   name: {
     type: String,
-    default: '',
+    default: "",
   },
   data: {
     type: Matrix,
@@ -48,11 +76,13 @@ const columns = computed(() => data.value.columns);
 const values = computed(() => data.value.values);
 const style = computed(() => ({
   // the case repeat(0, 1fr) is not valid css code so the case should be handle by hands
-  'grid-template-rows': 'repeat(' + (rows.value !== 0 ? rows.value : 1) + ', 1fr)',
-  'grid-template-columns': 'repeat(' + (columns.value !== 0 ? columns.value : 1) + ', 1fr)',
+  "grid-template-rows":
+    "repeat(" + (rows.value > 1 ? rows.value : 1) + ", 1fr)",
+  "grid-template-columns":
+    "repeat(" + (columns.value > 1 ? columns.value : 1) + ", 1fr)",
 }));
 
-defineEmits(['update:name', 'update:data']);
+const emit = defineEmits(["update:name", "update:data"]);
 
 const nameView = ref();
 const nameEdit = ref();
@@ -64,6 +94,14 @@ const isDataEditVisible = ref(false);
 
 function convertData(string) {
   return Matrix.fromString(string);
+}
+
+function onNameUpdate(event) {
+  emit("update:name", event.target.value);
+}
+
+function onDataUpdate(event) {
+  emit("update:data", convertData(event.target.value));
 }
 
 function toggleNameEditingMode() {
@@ -91,13 +129,12 @@ function toggleDataEditingMode() {
 }
 
 onMounted(() => {
-  nameEdit.value.onclick = event => event.stopPropagation();
-  dataEdit.value.onclick = event => event.stopPropagation();
+  nameEdit.value.onclick = (event) => event.stopPropagation();
+  dataEdit.value.onclick = (event) => event.stopPropagation();
 
   nameEdit.value.onblur = toggleNameEditingMode;
   dataEdit.value.onblur = toggleDataEditingMode;
 });
-
 </script>
 
 <style scoped>
@@ -121,9 +158,9 @@ onMounted(() => {
 }
 
 .left-bracket {
-  border-left: 2px solid black;
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
+  border-left: 2px solid #dee2e6;
+  border-top: 2px solid #dee2e6;
+  border-bottom: 2px solid #dee2e6;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
   width: 5px;
@@ -153,9 +190,9 @@ onMounted(() => {
 }
 
 .right-bracket {
-  border-right: 2px solid black;
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
+  border-right: 2px solid #dee2e6;
+  border-top: 2px solid #dee2e6;
+  border-bottom: 2px solid #dee2e6;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   width: 5px;
