@@ -18,33 +18,24 @@ This is web-based matrix calculator written in Vue. It allows users to perform v
 
 ## Demo
 
-https://github.com/tzorake/matrix-calculator/assets/9623983/6d86b401-8e7b-4fbd-9c5f-834b357cb737
+There is a [demo](https://tzorake.github.io/matrix-calculator/) on GitPages; try it yourself.
+
+https://github.com/tzorake/matrix-calculator/assets/9623983/bc7009e8-28d2-4fa0-9f76-d3b13f6f7a27
 
 ## Project setup
+
 ```
 npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
 
-### Setups and runs server for development
-```console
-
-$ python3 -m venv venv # Create a virtual environment
-
-$ source server/venv/bin/activate # Activate the virtual environment
-
-$ pip install numpy # Install numpy within the virtual environment
-
-$ python server/server.py # Run server.py
-
-$ deactivate # Deactivate the virtual environment
-```
-
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
