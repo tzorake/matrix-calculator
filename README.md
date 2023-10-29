@@ -18,7 +18,7 @@ This is web-based matrix calculator written in Vue. It allows users to perform v
 
 ## Demo
 
-There is a [demo](https://tzorake.github.io/matrix-calculator/) on GitPages; try it yourself.
+There is a [demo](https://tzorake.github.io/matrix-calculator/) on GitHub Pages; try it yourself.
 
 https://github.com/tzorake/matrix-calculator/assets/9623983/bc7009e8-28d2-4fa0-9f76-d3b13f6f7a27
 
