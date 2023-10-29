@@ -2,18 +2,19 @@
 
 ## Description
 
-This is a simple matrix calculator that can perform most matrix/vector operations. Data processing executes on the server, which is written in Python and uses Numpy for the matrix operations. So you can implement your own matrix operation quite easily (if you need it).
+This is web-based matrix calculator written in Vue. It allows users to perform various matrix operations, such as addition, subtraction, multiplication, transposition, inversion, determinant computation, and more. This calculator provides a seamless and dynamic user experience, enabling users to input matrix data, select operations, and obtain results instantly within their web browser. It simplifies complex mathematical tasks involving matrices and serves as a valuable resource for students and engineers working with linear algebra and related fields.
 
 ## Operations
-```
-1. Addition: add(A, B)
-2. Subtraction: subtract(A, B)
-3. Matrix Transposition: transpose(A)
-4. Dot Product: dot(vA, vB)
-5. Cross Product: cross(vA, vB)
-6. Matrix Inversion: inverse(A)
-7. Determinant Computation: det(A) 
-```
+
+| Operation                                 | Description                                                                 |
+|-------------------------------------------|-----------------------------------------------------------------------------|
+| Addition                                  | Combining matrices or vectors element-wise                                  |
+| Subtraction                               | Finding the difference between matrices or vectors element-wise             |
+| Matrix Transposition                      | Flipping rows and columns along the main diagonal                           |
+| Dot Product (Vector)                      | Computing the sum of the products of corresponding elements in two vectors  |
+| Cross Product (Vector)                    | Calculating a vector orthogonal to two inputs with area-related magnitude   |
+| Matrix Inversion                          | Inverting a square matrix for solving linear systems and more               |
+| Determinant Computation                   | Calculating a scalar property for matrix-related computations               |
 
 ## Demo
 
@@ -31,20 +32,16 @@ npm run serve
 
 ### Setups and runs server for development
 ```console
-# Create a virtual environment
-python3 -m venv venv
 
-# Activate the virtual environment
-source server/venv/bin/activate
+$ python3 -m venv venv # Create a virtual environment
 
-# Install numpy within the virtual environment
-pip install numpy
+$ source server/venv/bin/activate # Activate the virtual environment
 
-# Run server.py
-python server/server.py
+$ pip install numpy # Install numpy within the virtual environment
 
-# Deactivate the virtual environment
-deactivate
+$ python server/server.py # Run server.py
+
+$ deactivate # Deactivate the virtual environment
 ```
 
 ### Compiles and minifies for production
